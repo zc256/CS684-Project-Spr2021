@@ -1,0 +1,27 @@
+{% extends "regsys/base.html" %}
+{% block content %}
+<div id="main">
+	<button class="openbtn" onclick="openNav()">☰</button> 
+	<h1 style="margin-top: 0">COURSE SCHEDULE</h1><br><br> 
+	  <table border='1'>
+		  <tr>
+			  <th>Course Name</th>
+			  <th>Section Number</th>
+			  <th>Semester</th>			  
+			  <th>Year</th>
+			  <th>Drop Course</th>
+		  </tr>
+		  {% for r in register %}
+		  <tr>
+			  <th>{{r.course_no}}</th>
+			  <th>{{r.section_no}}</th>
+			  <th>{{r.semester}}</th>
+			  <th>{{r.year}}</th>
+			  <th>
+				<a class="btn btn-sm btn-info" href="{% url 'regsys-drop' r.id  %}">Drop</a>
+			  </th>
+		  </tr>
+		  {% endfor %}
+		</table>
+	</div>
+{% endblock content %}

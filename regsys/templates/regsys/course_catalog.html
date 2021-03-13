@@ -1,173 +1,51 @@
-<!-- {% load static %} -->
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Course Catalog</title>
-	<style>
-		body {
-			background-color: #f1f1f1;
-		} 
-
-		.sidebar {
-			height: 100%;
-			width: 0;
-			position: fixed;
-			z-index: 1;
-			top: 0;
-			left: 0;
-			background-color: #111;
-			overflow-x: hidden;
-			transition: 0.5s;
-			padding-top: 60px;
-		}
-
-		.sidebar a {
-			padding: 8px 8px 8px 32px;
-			text-decoration: none;
-			font-size: 25px;
-			color: #818181;
-			display: block;
-			transition: 0.3s;
-		}
-
-		.sidebar a:hover {
-			color: #f1f1f1;
-		}
-
-		.sidebar .closebtn {
-			position: absolute;
-			top: 0;
-			right: 25px;
-			font-size: 36px;
-			margin-left: 50px;
-		}
-
-		.openbtn {
-			font-size: 20px;
-			cursor: pointer;
-			background-color: #111;
-			color: white;
-			padding: 10px 15px;
-			border: none;
-		}
-
-		.openbtn:hover {
-			background-color: #444;
-		}
-
-		#main {
-			transition: margin-left .5s;
-			padding: 16px;
-		}
-
-		/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-		@media screen and (max-height: 450px) {
-		  .sidebar {padding-top: 15px;}
-		  .sidebar a {font-size: 18px;}
-		}
-
-        table { 
-            margin-left: auto;
-            margin-right: auto;
-            transition: margin-left .5s;
-            font-size: large; 
-            border: 1px solid black; 
-        } 
-  
-        h1 { 
-            text-align: center; 
-            color: black; 
-            font-size: xx-large; 
-            font-family: 'Gill Sans', 'Gill Sans MT',  
-            ' Calibri', 'Trebuchet MS', 'sans-serif'; 
-        } 
-  
-        td { 
-            background-color: #E4F5D4; 
-            border: 1px solid black; 
-        } 
-  
-        th, 
-        td { 
-            font-weight: bold; 
-            border: 1px solid black; 
-            padding: 10px; 
-            text-align: center; 
-        } 
-  
-        td { 
-            font-weight: lighter; 
-        } 
-		form {
-			text-align: center;
-		}
-    </style> 
-</head>
-<body>
-	<div id="mySidebar" class="sidebar">
-	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-	  <a href="{% url 'regsys-studentHome' %}">Home</a>
-	  <a href="{% url 'regsys-studentProfile' %}">Profile</a>
-	  <a href="{% url 'regsys-studentCatalog' %}">Course Catalog</a>
-	  <a href="{% url 'regsys-studentRegister'%}">Course Registration</a>
-	  <a href="{% url 'regsys-about' %}">About</a>
-	  <a href="{% url 'regsys-contact'%}">Contact</a>
-	  {% if user.is_authenticated %}
-	  <a class="nav-item nav-link" href="{% url 'regsys-logout' %}">Logout</a>
-	  {% else %}
-	  <a class="nav-item nav-link" href="{% url 'regsys-login' %}">Login</a>
-	  {% endif %}
-	</div>
-
+{% extends "regsys/base.html" %}
+{% block content %}
 	<div id="main">
 		<button class="openbtn" onclick="openNav()">☰</button> 
 		<h1 style="margin-top: 0">COURSE CATALOG</h1><br><br> 
-
 		<div class="row-12">
 			<div class="col-6">
 			  <div class="card card-body">
-		
 				<form method="get">
 				  {{myFilter.form}}
-		
 				  <button class="btn btn-primary" type="submit">Search</button>
 				</form>
-		
 			  </div>
 			</div>
-			
 		  </div>
 		  <table border='1'>
 			  <tr>
-				  <th>Course Number</th>
+				  <th>Section Number</th>
 				  <th>Course Name</th>
-				  <th>Description</th>
-				  <th>Credits</th>
+				  <th>Year</th>
+				  <th>Semester</th>
+				  <th>Weekday</th>
+				  <th>Start</th>
+				  <th>End</th>
+				  <th>Current Enrollment</th>
+				  <th>Max Enrollment</th>
+				  <th>Faculty</th>
+				  <th>Building</th>
+				  <th>Add Course</th>
 			  </tr>
-			  {% for c in courses %}
+			  {% for s in sections %}
 			  <tr>
-				  <th>{{c.course_num}}</th>
-				  <th>{{c.course_name}}</th>
-				  <th>{{c.description}}</th>
-				  <th>{{c.credits}}</th>
+				  <th>{{s.section_name}}</th>
+				  <th>{{s.course_no}}</th>
+				  <th>{{s.year}}</th>
+				  <th>{{s.semester}}</th>
+				  <th>{{s.weekday}}</th>
+				  <th>{{s.start}}</th>
+				  <th>{{s.end}}</th>
+				  <th>{{s.current_enrollment}}</th>
+				  <th>{{s.max_enrollment}}</th>
+				  <th>{{s.staff_id}}</th>
+				  <th>{{s.building_code}}</th>
+				  <th>
+					<a class="btn btn-sm btn-info" href="{% url 'regsys-studentRegister'%}">Add</a>
+				  </th>
 			  </tr>
 			  {% endfor %}
-				</table>
+			</table>
 	</div>
-
-	<script>
-		function openNav() {
-		  document.getElementById("mySidebar").style.width = "250px";
-		  document.getElementById("main").style.marginLeft = "250px";
-		}
-
-		function closeNav() {
-		  document.getElementById("mySidebar").style.width = "0";
-		  document.getElementById("main").style.marginLeft= "0";
-		}
-	</script>
-
-</body>
-
-</html>
+{% endblock content %}
