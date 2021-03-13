@@ -6,7 +6,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .decorators import faculty_only, unauthenticated_user, student_only
-from .filters import CourseFilter
+from .filters import CourseFilter, SectionFilter
+from django.contrib.auth.decorators import user_passes_test
+from .forms import RegisterForm
+
+@login_required(login_url='regsys-login')
+@user_passes_test(lambda u: u.is_superuser)
+def adminHome(request):
+	return render(request, 'regsys/ahome.html')
 
 @login_required(login_url='regsys-login')
 @faculty_only
@@ -26,23 +33,54 @@ def studentHome(request):
 
 @login_required(login_url='regsys-login')
 @student_only
-def studentProfile(request):
-	return render(request, 'regsys/studentProfile.html')
+def studentRegister(request):
+	sections = Section.objects.all()
+	form = RegisterForm()
+
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('regsys-studentCatalog')
+			
+	context = {'form':form, 'sections':sections}
+	return render(request, 'regsys/registration_form.html', context) 
 
 @login_required(login_url='regsys-login')
 @student_only
-def studentRegister(request):
-	return render(request, 'regsys/registration_form.html') 
+def studentProfile(request):
+	student = Student.objects.all()
+
+	context = {'student':student}
+	return render(request, 'regsys/studentProfile.html', context)
 
 @login_required(login_url='regsys-login')
 @student_only
 def studentCatalog(request):
-	courses = Course.objects.all()
+	sections = Section.objects.all()
 
-	myFilter = CourseFilter(request.GET, queryset=courses)
-	courses = myFilter.qs
-	context = {'courses':courses, 'myFilter':myFilter}
+	myFilter = SectionFilter(request.GET, queryset=sections)
+	sections = myFilter.qs
+	context = {'sections':sections, 'myFilter':myFilter}
 	return render(request, 'regsys/course_catalog.html', context) 
+
+@login_required(login_url='regsys-login')
+@student_only
+def studentSchedule(request):
+	register = Registration.objects.all()
+
+	context = {'register':register}
+	return render(request, 'regsys/schedule.html', context)
+
+@login_required(login_url='regsys-login')
+@student_only
+def dropCourse(request, pk):
+	register = Registration.objects.get(id=pk)
+	if request.method == "POST":
+		register.delete()
+		return redirect('regsys-studentCatalog')
+	context = {'course':register}
+	return render(request, 'regsys/drop.html', context)
 
 @login_required(login_url='regsys-login')
 @faculty_only
@@ -57,7 +95,10 @@ def loginPage(request):
 
 		user = authenticate(request, username=username, password=password)
 
-		if user is not None:
+		if user.is_superuser:
+			login(request, user)
+			return redirect('regsys-adminHome')
+		elif user is not None:
 			login(request, user)
 			return redirect('regsys-home')
 		else:
