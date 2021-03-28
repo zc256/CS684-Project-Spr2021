@@ -1,5 +1,5 @@
 import django_filters
-from .models import Course, Section
+from .models import Course, Section, Registration
 
 class CourseFilter(django_filters.FilterSet):
 	class Meta:
@@ -12,3 +12,15 @@ class SectionFilter(django_filters.FilterSet):
 		model = Section
 		fields = '__all__'
 		exclude = ['section_no', 'section_name', 'year', 'semester', 'weekday', 'start','end','current_enrollment', 'max_enrollment', 'staff_id','building_code']
+
+class EnrollmentFilter(django_filters.FilterSet):
+	class Meta:
+		model = Registration
+		fields = '__all__'
+		exclude = ['semester','year','grade','course_no','section_no']
+
+class GradingFilter(django_filters.FilterSet):
+	class Meta:
+		model = Registration
+		fields = '__all__'
+		exclude = ['semester','year','grade', 'section_no', 'stud_id']

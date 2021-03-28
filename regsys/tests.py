@@ -1,7 +1,40 @@
 from django.test import LiveServerTestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, AbstractUser
+from .models import *
 from selenium import webdriver
+import random
+import csv
 
+f_name = ['John', 'Maria', 'Bob', 'Steve', 'Nicole', 'Lauren', 'Zach', 'Rebecca']
+l_name = ['Stevens', 'O\'Brien', 'McDonald','Rodriguez','Davis']
+dep = ['CS', 'IT']
+num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+id = random.randint(100000,999999)
+
+i = 0
+while i <= 3:
+	firstName = str(random.choice(f_name))
+	lastName = str(random.choice(l_name))
+	name = firstName[0] + '' + lastName[0] + '' + str(random.choice(num))
+	stud_id = id
+	depC = Department.objects.get(dep_code=random.choice(dep))
+	email = name + '@gmail.com'
+	password = 'TestStudent1234'
+
+	user = User.objects.create_user(name, email, password)
+	user.first_name = firstName
+	user.last_name = lastName
+	user.save()
+	
+	
+	student = Group.objects.get(name='Student') 
+	student.user_set.add(user)
+
+	s = Student(student_id=stud_id, userName=user, ssn=0000000000, name=user.first_name+ ' '+user.last_name, gender='Male', address='Test', mob_no='1234567890', email=user.email, dep_code=depC)
+	s.pk = None
+	s.save() 
+
+	i +=1
 
 # User can log in to site depending on credentials (i.e. Student)
 class userLogin(LiveServerTestCase):
