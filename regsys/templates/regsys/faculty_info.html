@@ -1,0 +1,32 @@
+{% extends "regsys/adminBase.html" %}
+{% block content %}
+<div id="main">
+	<button class="openbtn" onclick="openNav()">☰</button> 
+	<h1 style="margin-top: 0">FACULTY INFORMATION</h1><br><br> 
+
+	<table>
+		<tr>
+			<th>Staff ID</th>
+			<th>Staff Name</th>
+			<th>Email Id</th>
+			<th>Mobile Number</th>
+			<th>Address</th>
+			<th>Salary</th>
+			<th>Rank</th>
+		</tr>
+
+		{% for s in staff %}
+			<tr>
+				<td>{{ s.staff_id }}</td>
+				<td>{{ s.name }}</td>
+				<td>{{ s.email }}</td>
+				<td>{{ s.mob_no }}</td>
+				<td>{{ s.address }}</td>
+				<td>{{ s.salary }}</td>
+				<td>{{ s.rank }}</td>
+			</tr>
+		{% endfor %}
+
+	</table>
+</div>
+{% endblock content %}

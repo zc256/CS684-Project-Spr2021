@@ -15,7 +15,7 @@
 		  </div>
 		  <table border='1'>
 			  <tr>
-				  <th>Section Number</th>
+				  <!-- <th>Section Number</th> -->
 				  <th>Course Name</th>
 				  <th>Year</th>
 				  <th>Semester</th>
@@ -30,7 +30,7 @@
 			  </tr>
 			  {% for s in sections %}
 			  <tr>
-				  <th>{{s.section_name}}</th>
+				  <!-- <th>{{s.section_no}}</th> -->
 				  <th>{{s.course_no}}</th>
 				  <th>{{s.year}}</th>
 				  <th>{{s.semester}}</th>
@@ -42,7 +42,7 @@
 				  <th>{{s.staff_id}}</th>
 				  <th>{{s.building_code}}</th>
 				  <th>
-					<a class="btn btn-sm btn-info" href="{% url 'regsys-studentRegister'%}">Add</a>
+					<a class="btn btn-sm btn-info" href="{% url 'regsys-studentRegister' s.section_no %}">Add</a>
 				  </th>
 			  </tr>
 			  {% endfor %}

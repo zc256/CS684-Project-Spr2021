@@ -1,0 +1,42 @@
+{% extends "regsys/adminBase.html" %}
+{% block content %}
+	<div id="main">
+		<button class="openbtn" onclick="openNav()">☰</button> 
+		<h1 style="margin-top: 0">STUDENT ENROLLMENT INFORMATION</h1><br><br> 
+
+		<div class="row-12">
+			<div class="col-6">
+			  <div class="card card-body">
+				<form method="get">
+				  {{myFilter.form}}
+				  <button class="btn btn-primary" type="submit">Search</button>
+				</form>
+			  </div>
+			</div>
+		</div>
+		<table>
+			<tr>
+				<th>Student ID</th>
+				<!-- <th>Student Name</th> -->
+				<th>Current Year</th>
+				<th>Current Semester</th>
+				<th>Grade</th>
+				<th>Course Number</th>
+				<th>Section Number</th>
+			</tr>
+
+			{% for e in enrollments %}
+				<tr>
+					<td>{{ e.student_id }}</td>
+					<!-- <td>{{ e.student_id__name }}</td> -->
+					<td>{{ e.year }}</td>
+					<td>{{ e.semester }}</td>
+					<td>{{ e.grade }}</td>
+					<td>{{ e.course_no }}</td>
+					<td>{{ e.section_no }}</td>
+				</tr>
+			{% endfor %}
+
+		</table>
+	</div>
+{% endblock content %}

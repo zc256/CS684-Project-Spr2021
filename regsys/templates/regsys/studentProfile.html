@@ -6,27 +6,23 @@
 
 		<table>
 			<tr>
-				<th>Student Id</th>
-				<th>Student Name</th>
+				<th>Student ID</th>
+				<th>User Name</th>
+				<th>Name</th>
 				<th>Gender</th>
-				<th>Address</th>
-				<th>Email</th>
 				<th>Mobile</th>
-				<th>SSN</th>
-				<th>Major</th>
-				<th>GPA</th>
+				<th>Address</th>
+				<th></th>
 			</tr>
 			{% for s in student %}
 			<tr>
+				<th>{{s.student_id}}</th>
 				<th>{{s.userName}}</th>
 				<th>{{s.name}}</th>
 				<th>{{s.gender}}</th>
-				<th>{{s.address}}</th>
-				<th>{{s.email}}</th>
 				<th>{{s.mob_no}}</th>
-				<th>{{s.ssn}}</th>
-				<th>{{s.dep_code}}</th>
-				<th>{{s.gpa}}</th>
+				<th>{{s.address}}</th>
+				<th><a href="{% url 'regsys-editinfo' %}">Edit Info</a></th>
 			</tr>
 			{% endfor %}
 		</table>

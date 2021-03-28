@@ -1,0 +1,33 @@
+{% extends "regsys/adminBase.html" %}
+{% block content %}
+  <div id="main">
+	  <button class="openbtn" onclick="openNav()">☰</button> 
+	  <h1 style="margin-top: 0">DELETE COURSE</h1><br><br> 
+	  <table border='1'>
+		<tr>
+			<th>Course Number</th>
+			<th>Course Name</th>
+			<th>Credit</th>
+			<th>Department</th>
+		</tr>
+		{% for s in del_course %}
+		<tr>
+			<th>{{s.course_no}}</th>
+			<th>{{s.course_name}}</th>
+			<th>{{s.credit}}</th>
+			<th>{{s.dep_code}}</th>
+		</tr>
+		{% endfor %}
+	  </table>
+	  <br><br>
+	  <div class="formdiv">
+		  <form method="POST">
+			  {% csrf_token %}
+			  <label for="cno">Course Number*:</label>
+			  <input type="text" id="cno" name="cno" placeholder="Type Course Number"><br><br><br>
+			  <center><input type="submit" value="Delete Course"></center>
+		  </form>
+	  </div>
+	  <div id="iframeHolder" class="iframe"></div>
+  </div>
+{% endblock content %}

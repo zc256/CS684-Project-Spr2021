@@ -1,0 +1,32 @@
+{% extends "regsys/adminBase.html" %}
+{% block content %}
+<div id="main">
+	<button class="openbtn" onclick="openNav()">☰</button> 
+	<h1 style="margin-top: 0">ADD COURSE</h1><br><br> 
+	<table border='1'>
+		<tr>
+			<th>Course Number</th>
+			<th>Course Name</th>
+			<th>Credits</th>
+			<th>Department</th>
+		</tr>
+		{% for s in up_course %}
+		<tr>
+			<th>{{s.course_no}}</th>
+			<th>{{s.course_name}}</th>
+			<th>{{s.credit}}</th>
+			<th>{{s.dep_code}}</th>
+		</tr>
+		{% endfor %}
+	  </table>
+	  <br><br>
+	<div class="formdiv">
+		<form action="" method="POST">
+			{% csrf_token %}
+			{{form}}
+			<input type="submit" name="Submit">
+		</form>
+	</div>
+	<div id="iframeHolder" class="iframe"></div>
+</div>
+{% endblock content %}

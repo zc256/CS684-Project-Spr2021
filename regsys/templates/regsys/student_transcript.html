@@ -1,0 +1,48 @@
+{% extends "regsys/base.html" %}
+{% block content %}
+	<div id="main">
+		<button class="openbtn" onclick="openNav()">☰</button> 
+		<h1 style="margin-top: 0">TRANSCRIPT</h1><br><br> 
+
+		<table>
+			<tr>
+				<th>Year</th>
+				<th>Semester</th>
+				<th>Course Number</th>
+				<!-- <th>Course Name</th> -->
+				<th>Section Number</th>
+				<!-- <th>Course Credit</th> -->
+				<th>Grade</th>
+			</tr>
+
+			{% for t in transcripts %}
+				<tr>
+					<td>{{ t.year }}</td>
+					<td>{{ t.semester }}</td>
+					<td>{{ t.course_no }}</td>
+					<td>{{ t.section_no }}</td>
+					<td>{{ t.grade }}</td>
+				</tr>
+			{% endfor %}
+
+		</table>
+<!-- 
+		<br><br>
+
+		<p>Summary:</p><br>
+		<table>
+			<tr>
+				<th>Totat Credits</th>
+				<th>CGPA</th>
+			</tr>
+
+			{% for s in summary %}
+				<tr>
+					<td>{{ s.cred }}</td>
+					<td>{{ s.average }}</td>
+				</tr>
+			{% endfor %}
+
+		</table> -->
+	</div>
+{% endblock content %}

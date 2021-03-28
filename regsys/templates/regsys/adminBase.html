@@ -102,19 +102,66 @@
         td { 
             font-weight: lighter; 
         } 
-		form {
-			text-align: center;
-		}
+		form{
+        	padding-left: 5px;
+        	transition: margin-left .5s;
+            font-size: large;
+			text-align:center;
+        }
+
+        .formdiv {
+        	margin-right: auto;
+        	margin-left: auto;
+        	border: 2px solid black;
+        	width: 30%;
+        	transition: margin-left .5s;
+        }
+        .iframe {
+        	display: block;
+        	text-align: center;
+        	transition: margin-left .5s;
+        }
+		label {
+        	cursor: pointer;
+            display: inline-block;
+            padding: 3px 6px;
+            text-align: right;
+            width: 200px;
+            vertical-align: top;
+        }
+
+        input[type=text],select {
+        	width: 50%;
+        }
+  		
+  		input[type=submit] {
+  			background-color: white;
+  			border: 2px solid green;
+  			border-radius: 15px;
+  			font-size: 20px;
+  		}
+
+		input[type=submit]:hover {
+  			background-color: green;
+  			border: 2px solid green;
+  			border-radius: 15px;
+  			font-size: 20px;
+  		}  	
     </style> 
 </head>
 <body>
 	<div id="mySidebar" class="sidebar">
 	  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-	  <a href="{% url 'regsys-studentHome' %}">Home</a>
-	  <a href="{% url 'regsys-studentProfile' %}">Profile</a>
-	  <a href="{% url 'regsys-studentCatalog' %}">Course Catalog</a>
-	  <a href="{% url 'regsys-studentSchedule' %}">Course Schedule</a>
-	  <a href="{% url 'regsys-transcript' %}">Transcript</a>
+	  <a href="{% url 'regsys-adminHome' %}">Home</a>
+	  <a href="{% url 'regsys-addcourse' %}">Add Course</a>
+	  <a href="{% url 'regsys-updatecourse' %}">Update Course</a>
+	  <a href="{% url 'regsys-deletecourse'%}">Delete Course</a>
+	  <a href="{% url 'regsys-addsection'%}">Add Section</a>
+	  <a href="{% url 'regsys-deletesection'%}">Delete Section</a>
+	  <a href="{% url 'regsys-viewstudents' %}">View Students</a>
+	  <a href="{% url 'regsys-viewstaff'%}">View Staff</a>
+	  <a href="{% url 'regsys-viewstats'%}">View Statistics</a>
+	  <a href="{% url 'regsys-enrollment'%}">View Enrollment</a>
 	  {% if user.is_authenticated %}
 	  <a class="nav-item nav-link" href="{% url 'regsys-logout' %}">Logout</a>
 	  {% else %}

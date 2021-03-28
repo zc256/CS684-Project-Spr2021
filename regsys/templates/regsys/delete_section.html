@@ -1,0 +1,49 @@
+{% extends "regsys/adminBase.html" %}
+{% block content %}
+<div id="main">
+	<button class="openbtn" onclick="openNav()">☰</button> 
+	<h1 style="margin-top: 0">DELETE SECTION</h1><br><br> 
+	<table border='1'>
+		<tr>
+			<th>Section Number</th>
+			<th>Course Name</th>
+			<th>Year</th>
+			<th>Semester</th>
+			<th>Weekday</th>
+			<th>Start</th>
+			<th>End</th>
+			<th>Current Enrollment</th>
+			<th>Max Enrollment</th>
+			<th>Faculty</th>
+			<th>Building</th>
+		</tr>
+		{% for s in up_course %}
+		<tr>
+			<th>{{s.section_no}}</th>
+			<th>{{s.course_no}}</th>
+			<th>{{s.year}}</th>
+			<th>{{s.semester}}</th>
+			<th>{{s.weekday}}</th>
+			<th>{{s.start}}</th>
+			<th>{{s.end}}</th>
+			<th>{{s.current_enrollment}}</th>
+			<th>{{s.max_enrollment}}</th>
+			<th>{{s.staff_id}}</th>
+			<th>{{s.building_code}}</th>
+		</tr>
+		{% endfor %}
+	  </table>
+	  <br><br>
+	<div class="formdiv">
+		<form method="POST">
+			{% csrf_token %}
+			<label for="cno">Course Number*:</label>
+			<input type="text" id="cno" name="cno" placeholder="Type Course Number"><br><br>
+			<label for="sno">Section Number*:</label>
+			<input type="text" id="sno" name="sno" placeholder="Type Section Number"><br><br><br>
+			<center><input type="submit" value="Delete Section"></center>
+		</form>
+	</div>
+	<div id="iframeHolder" class="iframe"></div>
+</div>
+{% endblock content %}
