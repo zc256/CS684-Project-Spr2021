@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'regsys.apps.RegsysConfig',
-    'accounts.apps.AccountsConfig',
     'crispy_forms',
     'django_extensions',
     'django.contrib.admin',
@@ -43,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pytest'
 ]
+
+# AUTH_USER_MODEL = 'regsys.MyUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
