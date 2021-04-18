@@ -1,51 +1,46 @@
 {% extends "regsys/base.html" %}
 {% block content %}
-	<div id="main">
-		<button class="openbtn" onclick="openNav()">☰</button> 
-		<h1 style="margin-top: 0">COURSE CATALOG</h1><br><br> 
-		<div class="row-12">
-			<div class="col-6">
-			  <div class="card card-body">
-				<form method="get">
-				  {{myFilter.form}}
-				  <button class="btn btn-primary" type="submit">Search</button>
-				</form>
-			  </div>
+	<h1 style="margin-top: 0">COURSE CATALOG</h1><br><br> 
+	<div class="row-12">
+		<div class="col-12">
+			<div class="card card-body">
+			<form method="get">
+				{{myFilter.form}}
+				<button class="btn btn-primary" type="submit">Search</button>
+			</form>
 			</div>
-		  </div>
-		  <table border='1'>
-			  <tr>
-				  <!-- <th>Section Number</th> -->
-				  <th>Course Name</th>
-				  <th>Year</th>
-				  <th>Semester</th>
-				  <th>Weekday</th>
-				  <th>Start</th>
-				  <th>End</th>
-				  <th>Current Enrollment</th>
-				  <th>Max Enrollment</th>
-				  <th>Faculty</th>
-				  <th>Building</th>
-				  <th>Add Course</th>
-			  </tr>
-			  {% for s in sections %}
-			  <tr>
-				  <!-- <th>{{s.section_no}}</th> -->
-				  <th>{{s.course_no}}</th>
-				  <th>{{s.year}}</th>
-				  <th>{{s.semester}}</th>
-				  <th>{{s.weekday}}</th>
-				  <th>{{s.start}}</th>
-				  <th>{{s.end}}</th>
-				  <th>{{s.current_enrollment}}</th>
-				  <th>{{s.max_enrollment}}</th>
-				  <th>{{s.staff_id}}</th>
-				  <th>{{s.building_code}}</th>
-				  <th>
-					<a class="btn btn-sm btn-info" href="{% url 'regsys-studentRegister' s.section_no %}">Add</a>
-				  </th>
-			  </tr>
-			  {% endfor %}
-			</table>
+		</div>
 	</div>
+	<table border='1'>
+		<tr>
+			<th>Course Name</th>
+			<th>Section</th>
+			<th>Year</th>
+			<th>Semester</th>
+			<th>Weekday</th>
+			<th>Start</th>
+			<th>End</th>
+			<th>Current Enrollment</th>
+			<th>Faculty</th>
+			<th>Building</th>
+			<th>Add Course</th>
+		</tr>
+		{% for s in sections %}
+		<tr>
+			<th>{{s.course_no}}</th>
+			<th>{{s.sec}}</th>
+			<th>{{s.year}}</th>
+			<th>{{s.semester}}</th>
+			<th>{{s.weekday}}</th>
+			<th>{{s.start}}</th>
+			<th>{{s.end}}</th>
+			<th>{{s.current_enrollment}}</th>
+			<th>{{s.staff_id}}</th>
+			<th>{{s.building_code}}</th>
+			<th>
+				<a class="btn btn-sm btn-info" href="{% url 'regsys-studentRegister' s.section_no %}">Add</a>
+			</th>
+		</tr>
+		{% endfor %}
+	</table>
 {% endblock content %}

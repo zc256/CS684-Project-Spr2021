@@ -1,10 +1,8 @@
 {% extends "regsys/adminBase.html" %}
 {% block content %}
-<div id="main">
-	<button class="openbtn" onclick="openNav()">☰</button> 
 	<h1 style="margin-top: 0">UPDATE COURSE</h1><br><br> 
 	<div class="row-12">
-		<div class="col-6">
+		<div class="col-12">
 		  <div class="card card-body">
 			<form method="get">
 			  {{myFilter.form}}
@@ -47,7 +45,4 @@
 		</tr>
 		{% endfor %}
 	  </table>
-	<div id="iframeHolder" class="iframe"></div>
-
-</div>
 {% endblock content %}

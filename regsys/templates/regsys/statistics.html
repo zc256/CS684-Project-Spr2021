@@ -1,30 +1,27 @@
 {% extends "regsys/adminBase.html" %}
 {% block content %}
-	<div id="main">
-		<button class="openbtn" onclick="openNav()">☰</button> 
-		<h1 style="margin-top: 0">STATISTICS</h1><br><br> 
-		<table>
-			<tr>
-				<th>Section Number</th>
-				<th>Course No</th>
-				<th>Year</th>
-				<th>Semester</th>
-				<th>Faculty ID</th>
-				<th>Current Enrollment</th>
-				<th>Max Enrollment</th>
-			</tr>
+	<h1 style="margin-top: 0">STATISTICS</h1><br><br> 
+	<table>
+		<tr>
+			<th>Section Number</th>
+			<th>Course No</th>
+			<th>Year</th>
+			<th>Semester</th>
+			<th>Faculty ID</th>
+			<th>Current Enrollment</th>
+			<th>Max Enrollment</th>
+		</tr>
 
-			{% for s in statistics %}
-				<tr>
-					<td>{{ s.section_no }}</td>
-					<td>{{ s.course_no }}</td>
-					<td>{{ s.year }}</td>
-					<td>{{ s.semester }}</td>
-					<td>{{ s.staff_id }}</td>
-					<td>{{ s.current_enrollment }}</td>
-					<td>{{ s.max_enrollment }}</td>
-				</tr>
-			{% endfor %}
-		</table>
-	</div>
+		{% for s in statistics %}
+			<tr>
+				<td>{{ s.section_no }}</td>
+				<td>{{ s.course_no }}</td>
+				<td>{{ s.year }}</td>
+				<td>{{ s.semester }}</td>
+				<td>{{ s.staff_id }}</td>
+				<td>{{ s.current_enrollment }}</td>
+				<td>{{ s.max_enrollment }}</td>
+			</tr>
+		{% endfor %}
+	</table>
 {% endblock content %}

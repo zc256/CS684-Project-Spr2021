@@ -6,7 +6,6 @@
 
 	<table>
 		<tr>
-			<th>Staff ID</th>
 			<th>Staff Name</th>
 			<th>Email Id</th>
 			<th>Mobile Number</th>
@@ -17,10 +16,9 @@
 
 		{% for s in staff %}
 			<tr>
-				<td>{{ s.staff_id }}</td>
-				<td>{{ s.name }}</td>
+				<td>{{ s.staffName }}</td>
 				<td>{{ s.email }}</td>
-				<td>{{ s.mob_no }}</td>
+				<td>{{ s.phone_number }}</td>
 				<td>{{ s.address }}</td>
 				<td>{{ s.salary }}</td>
 				<td>{{ s.rank }}</td>

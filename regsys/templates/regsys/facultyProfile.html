@@ -1,35 +1,24 @@
 {% extends "regsys/fbase.html" %}
 {% block content %}
-<div id="main">
-	<button class="openbtn" onclick="openNav()">☰</button> 
 	<h1 style="margin-top: 0">Faculty Profile</h1><br><br> 
 	<table>
 		<tr>
-			<th>Staff ID</th>
 			<th>Username</th>
 			<th>Name</th>
-			<th>SSN</th>
-			<th>Address</th>
 			<th>Email</th>
+			<th>Address</th>
 			<th>Mobile</th>
-			<th>Salary</th>
-			<th>Rank</th>
 			<th>Edit</th>
 		</tr>
 		{% for s in staff %}
 		<tr>
-			<th>{{s.staff_id}}</th>
 			<th>{{s.staffName}}</th>
 			<th>{{s.name}}</th>
-			<th>{{s.ssn}}</th>
-			<th>{{s.address}}</th>			
 			<th>{{s.email}}</th>
-			<th>{{s.mob_no}}</th>
-			<th>{{s.salary}}</th>
-			<th>{{s.Rank}}</th>
-			<th><a href="{% url 'regsys-editFacultyInfo' %}">Edit Info</a></th>
+			<th>{{s.address}}</th>			
+			<th>{{s.phone_number}}</th>
+			<th><a class="btn btn-sm btn-info" href="{% url 'regsys-editFacultyInfo' %}">Edit Info</a></th>
 		</tr>
 		{% endfor %}
 	</table>
-</div>
 {% endblock content %}

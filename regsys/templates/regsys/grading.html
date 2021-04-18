@@ -1,10 +1,8 @@
 {% extends "regsys/fbase.html" %}
 {% block content %}
-<div id="main">
-	<button class="openbtn" onclick="openNav()">☰</button> 
 	<h1 style="margin-top: 0">GRADING</h1><br><br> 
 	<div class="row-12">
-		<div class="col-6">
+		<div class="col-12">
 		  <div class="card card-body">
 			<form method="get">
 			  {{myFilter.form}}
@@ -13,21 +11,24 @@
 		  </div>
 		</div>
 	  </div>
-	  <table border='1'>
-		  <tr>
-			  <th>Course Number</th>
-			  <th>Student</th>
-			  <th>Grade</th>
-			  <th>Staff</th>
-		  </tr>
-		  {% for r in student%}
-		  <tr>
-			  <th>{{r.course_no}}</th>
-			  <th>{{r.stud_id}}</th>
-			  <th>{{r.grade}}</th>
-			  <th>{{r.staff}}</th>
-		  </tr>
-		  {% endfor %}
-		</table>
-	</div>
+	<table border='1'>
+		<tr>
+			<th>Course Number</th>
+			<th>Student</th>
+			<th>Grade</th>
+			<th>Staff</th>
+			<th>Assign Grade</th>
+		</tr>
+		{% for r in student%}
+		<tr>
+			<th>{{r.course_no}}</th>
+			<th>{{r.stud_id}}</th>
+			<th>{{r.grade}}</th>
+			<th>{{r.staff}}</th>
+			<th>
+				<a href="{%url 'regsys-facGrading' r.id%}">Assign</a>
+			</th>
+		</tr>
+		{% endfor %}
+	</table>
 {% endblock content %}

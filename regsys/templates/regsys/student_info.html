@@ -1,7 +1,5 @@
 {% extends "regsys/adminBase.html" %}
 {% block content %}
-<div id="main">
-	<button class="openbtn" onclick="openNav()">☰</button> 
 	<h1 style="margin-top: 0">STUDENT INFORMATION</h1><br><br> 
 	<table>
 		<tr>
@@ -21,13 +19,11 @@
 				<td>{{ s.name }}</td>
 				<td>{{ s.gender }}</td>
 				<td>{{ s.email }}</td>
-				<td>{{ s.mob_no }}</td>
+				<td>{{ s.phone_number }}</td>
 				<td>{{ s.address }}</td>
 				<td>{{ s.dep_code }}</td>
 				<td>{{ s.gpa }}</td>
 			</tr>
 		{% endfor %}
-
 	</table>
-</div>
 {% endblock content %}

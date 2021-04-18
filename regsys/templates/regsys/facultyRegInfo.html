@@ -1,7 +1,7 @@
-{% extends "regsys/base.html" %}
+{% extends "regsys/fbase.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-	<h1>Registration Screen</h1>
+	<h1>CHANGE GRADE</h1>
 	<form action="" method="POST">
 		{% csrf_token %}
 		{{form|crispy}}

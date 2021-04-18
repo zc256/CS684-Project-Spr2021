@@ -1,22 +1,11 @@
 {% extends "regsys/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-	<div id="main">
-		<button class="openbtn" onclick="openNav()">☰</button> 
-		<h1 style="margin-top: 0">UPDATE PERSONAL INFORMATION</h1><br><br> 
-		<div class="formdiv">
-			<form method="POST">
-				{% csrf_token %}
-				<label for="student_id">Student Id*:</label>
-				<input type="text" id="student_id" name="student_id" placeholder="Type Student ID"><br><br>
-				<label for="gender">Gender:</label>
-				<input type="text" id="gender" name="gender" placeholder="Type Gender"><br><br>				
-				<label for="mob">Mobile Number:</label>
-				<input type="text" id="mob" name="mob" placeholder="Type Mobile Number"><br><br>
-				<label for="address">Address:</label>
-				<input type="text" id="address" name="address" placeholder="Type Address"><br><br><br>
-				<center><input type="submit" value="Update Information"></center>
-			</form>
-		</div>
-		<div id="iframeHolder" class="iframe"></div>
-	</div>
+	<h1 style="margin-top: 0">UPDATE PERSONAL INFORMATION</h1><br><br> 
+	<div class="formdiv">
+		<form method="POST">
+			{% csrf_token %}
+			{{form|crispy}}
+			<center><input type="submit" value="Update Information"></center> 
+		</form>
 {% endblock content %}
