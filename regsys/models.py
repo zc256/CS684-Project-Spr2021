@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
+from phone_field import PhoneField
 
 class Department(models.Model):
 	dep_code = models.CharField(primary_key=True, max_length=20, default='None')
@@ -27,7 +28,7 @@ class Staff(models.Model):
 	name = models.CharField(max_length=100, default="None")	
 	address = models.CharField(max_length=80, default='None')
 	email = models.EmailField(max_length=254)
-	mob_no = models.CharField(max_length=20, default='None')
+	phone_number = PhoneField(blank=True,E164_only=False)
 	salary = models.FloatField()
 	rank = models.CharField(max_length=20, default='None')
 
@@ -40,13 +41,26 @@ class Building(models.Model):
 	location = models.CharField(max_length=50, default='None')
 
 	def __str__(self):
-		return self.building_code
+		return self.building_name
 	
 class Section(models.Model):
+	SEMESTER = [
+		('Fall', 'Fall'),
+		('Spring', 'Spring'),
+	]
+
+	WEEKDAY = [
+		('Monday','Monday'),
+		('Tuesday', 'Tuesday'),
+		('Wednesday','Wednesday'),
+		('Thursday', 'Thursday'),
+		('Friday','Friday'),
+	]
 	section_no = models.CharField(primary_key=True, max_length=10)
+	sec = models.IntegerField(default=1)
 	year = models.IntegerField(default=2020)
-	semester = models.CharField(max_length=15, default='None')
-	weekday = models.CharField(max_length=10, default='None')
+	semester = models.CharField(max_length=15, default='None', choices=SEMESTER)
+	weekday = models.CharField(max_length=10, default='None', choices=WEEKDAY)
 	start = models.CharField(max_length=10, default='None')
 	end = models.CharField(max_length=10, default='None')
 	current_enrollment = models.IntegerField(default=0, validators=[MaxValueValidator(30),MinValueValidator(0)])
@@ -56,7 +70,7 @@ class Section(models.Model):
 	building_code = models.ForeignKey(Building, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return str(self.course_no) + '-' + self.section_no
+		return str(self.course_no) + '-' + str(self.sec)
 
 # userName added
 class Student(models.Model):
@@ -71,7 +85,7 @@ class Student(models.Model):
 	name = models.CharField(max_length=100, default="None")
 	gender = models.CharField(max_length=10, choices=GENDER)
 	address = models.CharField(max_length=80, default='None')
-	mob_no = models.CharField(max_length=10, default='None')
+	phone_number = PhoneField(blank=True,E164_only=False)
 	email = models.EmailField(max_length=254)
 	dep_code = models.ForeignKey(Department, on_delete=models.CASCADE)
 
@@ -84,31 +98,27 @@ class Registration(models.Model):
 		('Fall', 'Fall'),
 		('Spring', 'Spring'),
 	]
-	GRADE = [
-		('A','A'),
-		('B','B'),
-		('C','C'),
-		('D','D'),
-		('F','F'),
-	]	
 	semester = models.CharField(max_length=15, default='None', choices=SEMESTER)
 	year = models.IntegerField()
-	grade = models.CharField(max_length=3, default='A', choices=GRADE)
+	grade = models.DecimalField(max_digits=4, decimal_places=2, default=0.00)
 	stud_id = models.ForeignKey(User, on_delete=models.CASCADE)
 	course_no = models.ForeignKey(Course, on_delete=models.CASCADE)
 	section_no = models.ForeignKey(Section, on_delete=models.CASCADE)
 	staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
 
-# Similar to ddl
-class Room(models.Model):
-	room_id = models.IntegerField(primary_key=True, default='None')
-	room_no = models.CharField(max_length=20, default='None')
-	building_code = models.ForeignKey(Building, on_delete=models.CASCADE)
-	capacity = models.IntegerField()
-	audio_visual = models.CharField(max_length=2, default='None')
+	@property
+	def num_grade(self):
+		if self.grade == 'A':
+			return 4
+		elif self.grade == 'B':
+			return 3
+		elif self.grade == 'C':
+			return 2
+		elif self.grade == 'D':
+			return 1
+		else:
+			return 0		
 
-	def __str__(self):
-		return self.room_no
 
 # Similar to ddl
 class faculty_department(models.Model):

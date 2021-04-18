@@ -17,7 +17,7 @@ class EnrollmentFilter(django_filters.FilterSet):
 	class Meta:
 		model = Registration
 		fields = '__all__'
-		exclude = ['semester','year','grade','course_no','section_no']
+		exclude = ['semester','year','grade','course_no','section_no','staff']
 
 class GradingFilter(django_filters.FilterSet):
 	class Meta:

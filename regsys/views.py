@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect 
-from django.db.models import F
+from django.db.models import F, Max, Sum, Avg, Func
+from django.db.models.functions import Round
 from django.forms import inlineformset_factory
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -8,7 +9,7 @@ from .models import *
 from .decorators import faculty_only, unauthenticated_user, student_only
 from .filters import CourseFilter, SectionFilter, EnrollmentFilter,GradingFilter
 from django.contrib.auth.decorators import user_passes_test
-from .forms import RegisterForm, UpdateCourseForm, AddSectionForm, AddCourseForm
+from .forms import RegisterForm, UpdateCourseForm, AddSectionForm, AddCourseForm,ChangeGradeForm, StudentForm, StaffForm
 from django.db import transaction
 from django.contrib.auth.models import User
 
@@ -92,7 +93,6 @@ def addcourse(request):
   context = {'form':form,'up_course':up_course}
   return render(request, "regsys/add_course.html",context)
 
-
 @login_required(login_url='regsys-login')
 @student_only
 def dropCourse(request, pk):
@@ -109,16 +109,16 @@ def dropCourse(request, pk):
 @login_required(login_url='regsys-login')
 @student_only
 def studentRegister(request,pk):
-	sections = Section.objects.all()
+	sections = Section.objects.filter(section_no=pk)
 
 	form = RegisterForm()
 	if request.method == 'POST':
-		form = RegisterForm(request.POST) #, instance=sections)
+		form = RegisterForm(request.POST)
 		if form.is_valid():
 			student = form.save(commit=False)
 			student.stud_id = request.user
 			student.save()
-			# Section.objects.filter(section_no__in=sec).update(current_enrollment=F('current_enrollment') + 1) 
+			Section.objects.filter(section_no__in=sections).update(current_enrollment=F('current_enrollment') + 1) 
 			return redirect('regsys-studentCatalog')
 	context = {'form':form, 'sections':sections}
 	return render(request, 'regsys/registration_form.html', context) 
@@ -227,18 +227,30 @@ def enrollment(request):
   context = {'enrollments':enrollments, 'myFilter':myFilter}
   return render(request, "regsys/student_enrollment.html", context)
 
-# MAY NEED TO CREATE NEW MODEL 'GRADES'
-# IT WOULD BE SIMILAR TO REGISTRATION BUT HAVE USER
-# SWAPPED BETWEEN STUDENT AND STAFF
-# @login_required(login_url='regsys-login')
-# @faculty_only
-# def grading(request,pk):
-# 	student = Registration.objects.all().filter(registration__staff=pk)
-# 	myFilter = GradingFilter(request.GET, queryset=student)
-# 	student = myFilter.qs
-# 	context = {'student':student, 'myFilter':myFilter}
-# 	return render(request, "regsys/grading.html", context)
+@login_required(login_url='regsys-login')
+@faculty_only
+def grading(request,staffName):
+	student = Registration.objects.filter(staff_id=staffName)
+	myFilter = GradingFilter(request.GET, queryset=student)
+	student = myFilter.qs
+	context = {'student':student, 'myFilter':myFilter}
+	return render(request, "regsys/grading.html", context)
 
+@login_required(login_url='regsys-login')
+@faculty_only
+def facultyGrading(request,pk):
+	student = Registration.objects.filter(id=pk).first()
+	form = ChangeGradeForm(instance=student)
+
+	if request.method == 'POST':
+		form = ChangeGradeForm(request.POST, instance=student)
+		if form.is_valid():
+			form.save()
+			return redirect('regsys-facultySchedule')
+	context = {'form':form,'student':student}
+	return render(request, "regsys/facultyRegInfo.html", context)
+
+# COULD POTENTIALLY FILTER FROM REGISTRATION MODEL INSTEAD FOR STAFF
 @login_required(login_url='regsys-login')
 @faculty_only
 def facultySchedule(request):
@@ -249,36 +261,37 @@ def facultySchedule(request):
 @login_required(login_url='regsys-login')
 @student_only
 def editinfo(request):
-	if (request.method == 'POST') and (request.POST.get('student_id')):
-		with transaction.atomic():
-		  student = Student.objects.get(student_id = request.POST.get('student_id'))
-		  if(request.POST.get('gender')):
-		    student.gender = request.POST.get('gender')
-		  if(request.POST.get('mob')):
-		    student.mob_no = request.POST.get('mob')
-		  if(request.POST.get('address')):
-		    student.address = request.POST.get('address')
-		  student.save()
-		  return redirect('regsys-studentProfile')
-	return render(request, "regsys/edit_info.html")
+	student = Student.objects.filter(userName=request.user).first()
+	form = StudentForm()
+
+	if request.method == 'POST':
+		form = StudentForm(request.POST, instance=student)
+		if form.is_valid():
+			form.save()
+			return redirect('regsys-studentProfile')
+	context = {'form':form, 'student':student}
+	return render(request, "regsys/edit_info.html", context)
 
 @login_required(login_url='regsys-login')
 @faculty_only
 def editFacultyInfo(request):
-  if (request.method == 'POST') and (request.POST.get('staff_id')):
-    with transaction.atomic():
-      staff = Staff.objects.get(staff_id = request.POST.get('staff_id'))
-      if(request.POST.get('mob')):
-        staff.mob_no = request.POST.get('mob')
-      if(request.POST.get('address')):
-        staff.address = request.POST.get('address')
-      staff.save()
-      return redirect('regsys-facultyProfile')
-  return render(request, "regsys/edit_finfo.html")
+	staff = Staff.objects.filter(staffName=request.user).first()
+	form = StaffForm()
+
+	if request.method == 'POST':
+		form = StaffForm(request.POST, instance=staff)
+		if form.is_valid():
+			form.save()
+			return redirect('regsys-facultyProfile')
+	context = {'form':form, 'staff':staff}
+	return render(request, "regsys/edit_finfo.html", context)
 
 @login_required(login_url='regsys-login')
 @student_only
 def transcript(request):
-  transcripts = Registration.objects.filter(stud_id=request.user)
-  context = {'transcripts':transcripts}
+  transcripts = Registration.objects.all().values(
+	  'course_no', 'course_no__course_name',
+    'year', 'semester', 'course_no__credit', 'grade').filter(stud_id=request.user).order_by('year','semester')
+  summary = Registration.objects.values('stud_id').filter(stud_id=request.user).annotate(cred = Sum('course_no__credit'), average = Avg('grade'))  
+  context = {'transcripts':transcripts, 'summary':summary}
   return render(request, "regsys/student_transcript.html", context)
